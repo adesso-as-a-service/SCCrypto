@@ -7,6 +7,7 @@ namespace SCCrypto
     public class Settings
     {
         private string pkcs11LibraryPath;
+        private Pkcs11 pkcs11Store;
 
         public Mechanism encryptionMechanism
         {
@@ -36,7 +37,12 @@ namespace SCCrypto
 
         public Pkcs11 GetLibrary()
         {
-            return new Pkcs11(pkcs11LibraryPath, AppType.SingleThreaded);
+            if (pkcs11Store != null)
+            {
+                pkcs11Store.Dispose();
+            }
+            pkcs11Store = new Pkcs11(pkcs11LibraryPath, AppType.SingleThreaded);
+            return pkcs11Store;
         }
     }
 }

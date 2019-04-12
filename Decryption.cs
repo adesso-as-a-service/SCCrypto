@@ -40,9 +40,7 @@ namespace SCCrypto
         // return remaining, cipher and decrypted data
         public Tuple<int,byte[],byte[]> Do()
         {
-            int returnValue;
             byte[] plainText, Cipher;
-            string owner;
             int selection;
             
             Tuple<List<Certificate>,List<Slot>> certsAndSlots;
@@ -75,8 +73,6 @@ namespace SCCrypto
                 {
                     // list needed Keys and wait for response
                     smartCard.settings.userIO.outputListAbort(getNeededKeys());
-                    // handle abort
-                    return new Tuple<int, byte[], byte[]>(NO_KEY_FOUND, null, null);
                 }
 
                 // Select Key
@@ -103,7 +99,7 @@ namespace SCCrypto
             return new Tuple<int, byte[], byte[]>(remaining, Cipher, plainText);
         }
 
-        public int OfferKeys(List<Certificate> certs)
+        private int OfferKeys(List<Certificate> certs)
         {
             List<string> choices = new List<string>();
             for (int i = 0; i < certs.Count; i++)
