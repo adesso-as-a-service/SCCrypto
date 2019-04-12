@@ -34,14 +34,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BouncyCastle.Crypto, Version=1.8.4.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
-      <HintPath>..\packages\BouncyCastle.1.8.4\lib\BouncyCastle.Crypto.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="Pkcs11Interop, Version=4.1.0.0, Culture=neutral, PublicKeyToken=c10e9c2d8c006d2a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Pkcs11Interop.4.1.0\lib\net45\Pkcs11Interop.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
@@ -80,6 +72,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\bc-csharp\crypto\crypto.csproj">
+      <Project>{38872a5f-e87e-4fad-b109-8eb7b2e6a4a0}</Project>
+      <Name>crypto</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Pkcs11Interop\src\Pkcs11Interop\Pkcs11Interop.csproj">
+      <Project>{c005bae5-3aef-4176-b250-4688a8d8ae50}</Project>
+      <Name>Pkcs11Interop</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
