@@ -28,12 +28,20 @@ namespace SCCrypto
 
         private SmartCard smartCard;
 
+<<<<<<< HEAD
         public Encryption(SmartCard smartCard, LinkedList<byte[]> dataToEncrypt, bool allowDoubleOwners, bool allowDoubleUsers)
+=======
+        public Encryption(SmartCard smartCard, LinkedList<byte[]> dataToEncrypt, bool allowDoubleOwners, bool allowDoubleKeys)
+>>>>>>> 2ba87fa3a3923c265bc0b46056977032c18ee88b
         {
             usedKeys = new HashSet<RsaKeyParameters>();
             usedOwners = new HashSet<string>();
             this.allowDoubleOwners = allowDoubleOwners;
+<<<<<<< HEAD
             this.allowDoubleKeys = allowDoubleUsers;
+=======
+            this.allowDoubleKeys = allowDoubleKeys;
+>>>>>>> 2ba87fa3a3923c265bc0b46056977032c18ee88b
             this.smartCard = smartCard;
             this.dataToEncrypt = dataToEncrypt;
         }
@@ -47,6 +55,8 @@ namespace SCCrypto
             Certificate cert;
             RsaKeyParameters key;
             X509Certificate x509;
+            List<string> noCerts = new List<string>();
+            noCerts.Add("Please insert a Key!");
             Tuple<byte[], byte[]> encRet;
             do
             {
@@ -63,7 +73,10 @@ namespace SCCrypto
                 }
                 // Offer Keys
                 // handle Exceptions
+
                 selection = OfferKeys(certs);
+
+                
             } while (selection == -1);
             cert = certs[selection];
             x509 = cert.Get509Certificate();
@@ -79,7 +92,7 @@ namespace SCCrypto
             return new Tuple<int, byte[], byte[], byte[], string>(dataToEncrypt.Count, encRet.Item1, encRet.Item2, cert.CkaSubPubKeyHash, x509.SubjectDN.ToString());
         }
 
-        public int OfferKeys(List<Certificate> certs)
+        private int OfferKeys(List<Certificate> certs)
         {
             List<string> choices = new List<string>();
             for (int i = 0; i < certs.Count; i++)

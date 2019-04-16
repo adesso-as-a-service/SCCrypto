@@ -26,11 +26,11 @@ namespace SCCrypto
         public Tuple<List<Certificate>,List<Slot>> getAvailableCertsAndSlots()
         {
             Pkcs11 pkcs11 = settings.GetLibrary();
-
+            
             List<Slot> slots = pkcs11.GetSlotList(SlotsType.WithTokenPresent);
 
             List<Certificate> certs = new List<Certificate>();
-            List<Slot> retSlots= new List<Slot>();
+            List<Slot> retSlots = new List<Slot>();
 
             List<Certificate> tempCerts;
 
@@ -47,14 +47,12 @@ namespace SCCrypto
                         {
                             certs.Add(cert);
                             retSlots.Add(slot);
-
                         }
                     }
                 }
             }
-
-            return new Tuple<List<Certificate>, List<Slot>>(certs,retSlots);
-
+            return new Tuple<List<Certificate>, List<Slot>>(certs, retSlots);
+            
         }
 
         // get privateKeyHandle via KeyID
