@@ -68,15 +68,12 @@
     <Compile Include="SmartCard.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\bc-csharp\crypto\crypto.csproj">
       <Project>{38872a5f-e87e-4fad-b109-8eb7b2e6a4a0}</Project>
       <Name>crypto</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Pkcs11Interop\src\Pkcs11Interop\Pkcs11Interop.csproj">
-      <Project>{c005bae5-3aef-4176-b250-4688a8d8ae50}</Project>
+    <ProjectReference Include="..\Pkcs11Interop\src\Pkcs11Interop\Pkcs11Interop\Pkcs11Interop.csproj">
+      <Project>{9bc3ee70-6b0b-4b26-8c06-b7ae50be202e}</Project>
       <Name>Pkcs11Interop</Name>
     </ProjectReference>
   </ItemGroup>

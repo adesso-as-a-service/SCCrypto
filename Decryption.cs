@@ -40,9 +40,7 @@ namespace SCCrypto
         // return remaining, cipher and decrypted data
         public Tuple<int,byte[],byte[]> Do()
         {
-            int returnValue;
             byte[] plainText, Cipher;
-            string owner;
             int selection;
             
             Tuple<List<Certificate>,List<Slot>> certsAndSlots;
