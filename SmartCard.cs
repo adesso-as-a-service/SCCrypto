@@ -40,11 +40,13 @@ namespace SCCrypto
                 foreach (Certificate cert in tempCerts)
                 {
                     // Take just Keymanagement Cert
-                    if (cert.CkaId.Length == 1 && cert.CkaId[0] == 0x03)
+                    PubKey key = PubKey.GetKey(slot.OpenSession(SessionType.ReadOnly),cert.CkaId);
+                    if (key.CkaWrap && key.CkaEncrypt)
                     {
                         // only accept RSA for now
-                        if (cert.CheckKeyType(slot, CKK.CKK_RSA))
+                        if(key.GetAttribute(CKA.CKA_KEY_TYPE).GetValueAsUlong() == (uint)CKK.CKK_RSA)
                         {
+                            cert.addKey(key);
                             certs.Add(cert);
                             retSlots.Add(slot);
                         }
@@ -66,7 +68,6 @@ namespace SCCrypto
             if (foundObjects.Count == 0) return null;
             session.FindObjectsFinal();
             return foundObjects[0];
-
         }
 
     }

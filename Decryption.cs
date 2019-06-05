@@ -76,7 +76,7 @@ namespace SCCrypto
                 }
 
                 // Select Key
-                selection = OfferKeys(certs);
+                selection = OfferKeys(certs, slots);
             } while (selection == -1);
             cert = certs[selection];
             slot = slots[selection];
@@ -99,12 +99,19 @@ namespace SCCrypto
             return new Tuple<int, byte[], byte[]>(remaining, Cipher, plainText);
         }
 
-        private int OfferKeys(List<Certificate> certs)
+        private int OfferKeys(List<Certificate> certs, List<Slot> slots)
         {
+            TokenInfo info;
             List<string> choices = new List<string>();
             for (int i = 0; i < certs.Count; i++)
             {
-                choices.Add(certs[i].Get509Certificate().SubjectDN.ToString());
+                // TODO String aufarbeiten
+                string certStr = certs[i].Get509Certificate().SubjectDN.ToString();
+                string certLabel = certs[i].CkaLabel;
+                info = slots[i].GetTokenInfo();
+                string tokenInfo = info.Label + " / " + info.ManufacturerId + " / " + info.Model + " / " + info.SerialNumber + " / " + info.UtcTimeString;
+
+                choices.Add(certStr + " / " + certLabel + " / " + tokenInfo);
             }
 
             return smartCard.settings.userIO.selectFromList(choices);
@@ -165,11 +172,10 @@ namespace SCCrypto
         private List<string> getNeededKeys()
         {
             List<string> ret = new List<string>();
-            ret.Add("Remaining keys needed for decryption");
             foreach (KeyValuePair<byte[], LinkedList<Tuple<string, byte[]>>> kp in fastDataToDecrypt)
             {
                 // read first owner and publickeyhash
-                ret.Add(String.Format("{0}\t|\t{1}",kp.Value.First.Value.Item1, Convert.ToBase64String(kp.Key)));
+                ret.Add(String.Format("{0} / {1}",kp.Value.First.Value.Item1, Convert.ToBase64String(kp.Key)));
             }
             return ret;
         }

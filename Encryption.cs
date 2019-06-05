@@ -6,6 +6,7 @@ using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Crypto.Encodings;
 using Org.BouncyCastle.Crypto.Engines;
+using Net.Pkcs11Interop.HighLevelAPI;
 
 namespace SCCrypto
 {
@@ -44,6 +45,7 @@ namespace SCCrypto
             string owner;
             int selection;
             List<Certificate> certs;
+            List<Slot> slots;
             Certificate cert;
             RsaKeyParameters key;
             X509Certificate x509;
@@ -53,7 +55,13 @@ namespace SCCrypto
             do
             {
                 // get Available Keys
-                certs = smartCard.getAvailableCertsAndSlots().Item1;
+                //System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
+                //stopwatch.Start();
+                Tuple<List<Certificate>, List<Slot>> certSlot = smartCard.getAvailableCertsAndSlots();
+                //stopwatch.Stop();
+               // System.Windows.Forms.MessageBox.Show(String.Format("{0}ms", stopwatch.ElapsedMilliseconds));
+                certs = certSlot.Item1;
+                slots = certSlot.Item2;
                 // Remove used keys
                 for (int i = certs.Count - 1; i >= 0; i--)
                 {
@@ -66,7 +74,7 @@ namespace SCCrypto
                 // Offer Keys
                 // handle Exceptions
 
-                selection = OfferKeys(certs);
+                selection = OfferKeys(certs, slots);
 
                 
             } while (selection == -1);
@@ -84,12 +92,19 @@ namespace SCCrypto
             return new Tuple<int, byte[], byte[], byte[], string>(dataToEncrypt.Count, encRet.Item1, encRet.Item2, cert.CkaSubPubKeyHash, x509.SubjectDN.ToString());
         }
 
-        private int OfferKeys(List<Certificate> certs)
+        private int OfferKeys(List<Certificate> certs, List<Slot> slots)
         {
+            TokenInfo info;
             List<string> choices = new List<string>();
             for (int i = 0; i < certs.Count; i++)
             {
-                choices.Add(certs[i].Get509Certificate().SubjectDN.ToString());
+                // TODO String aufarbeiten
+                string certStr = certs[i].Get509Certificate().SubjectDN.ToString();
+                string certLabel = certs[i].CkaLabel;
+                info = slots[i].GetTokenInfo();
+                string tokenInfo = info.Label +" / "+ info.ManufacturerId + " / " + info.Model + " / " + info.SerialNumber + " / " + info.UtcTimeString;
+                   
+                choices.Add(certStr + " / " + certLabel + " / " + tokenInfo);
             }
 
             return smartCard.settings.userIO.selectFromList(choices);

@@ -72,6 +72,12 @@ namespace SCCrypto
             internal set;
         }
 
+        public PubKey PubKey
+        {
+            get;
+            internal set;
+        }
+
         private void calcPubKeyHash()
         {
             X509Certificate x509 = this.Get509Certificate();
@@ -165,6 +171,20 @@ namespace SCCrypto
             return new X509CertificateParser().ReadCertificate(this.CkaValue);
         }
 
+        public ObjectAttribute GetAttribute(CKA Attribute)
+        {
+            ObjectAttribute res = null;
+            for (int i = 0; i < ObjectAttributes.Count; i++)
+            {
+                if (ObjectAttributes[i].Type == (ulong)Attribute)
+                {
+                    res = ObjectAttributes[i];
+                }
+            }
+
+            return res;
+        }
+
         // Checks if KeyType of Cert is of the given type
         public bool CheckKeyType(Slot slot, CKK keyType)
         {
@@ -187,6 +207,11 @@ namespace SCCrypto
                 return result;
 
             }
+        }
+
+        public void addKey(PubKey key)
+        {
+            this.PubKey = key;
         }
     }
 
