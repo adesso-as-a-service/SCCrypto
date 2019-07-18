@@ -29,12 +29,12 @@ namespace SCCrypto
 
         private SmartCard smartCard;
 
-        public Encryption(SmartCard smartCard, LinkedList<byte[]> dataToEncrypt, bool allowDoubleOwners, bool allowDoubleUsers)
+        public Encryption(SmartCard smartCard, LinkedList<byte[]> dataToEncrypt, bool allowDoubleOwners, bool allowDoubleKeys)
         {
             usedKeys = new HashSet<RsaKeyParameters>();
             usedOwners = new HashSet<string>();
             this.allowDoubleOwners = allowDoubleOwners;
-            this.allowDoubleKeys = allowDoubleUsers;
+            this.allowDoubleKeys = allowDoubleKeys;
             this.smartCard = smartCard;
             this.dataToEncrypt = dataToEncrypt;
         }
